@@ -1,16 +1,31 @@
-# 🧭 DevOps Mission #1 – Mount Persistence Challenge
+# 🧪 Lab 01 — Mount Persistence
 
 ## 🎯 هدف
-یادگیری مراحل کامل Mount و ماندگاری آن پس از ریبوت سیستم.
+- Mount کردن پارتیشن و پایدارسازی آن پس از ریبوت با `/etc/fstab`
 
-## ⚙️ مراحل اجرا
-1. اضافه کردن دیسک جدید به سیستم مجازی  
-2. ساخت پارتیشن جدید با fdisk  
-3. فرمت با mkfs.ext4  
-4. ساخت Mount Point در /mnt/data  
-5. Mount کردن دستی  
-6. افزودن UUID به /etc/fstab  
-7. ریبوت و بررسی ماندگاری Mount  
+## گام‌ها
+1. شناسایی پارتیشن:
+```bash
+lsblk -f
+```
+2. گرفتن UUID:
+```bash
+tune2fs -l /dev/sdb5 | grep UUID
+```
+3. Mount موقت:
+```bash
+sudo mkdir -p /mnt/data
+sudo mount /dev/sdb5 /mnt/data
+```
+4. ثبت در `/etc/fstab` (با UUID):
+```
+UUID=<YOUR-UUID>  /mnt/data  ext4  defaults  0  2
+```
+5. اعتبارسنجی:
+```bash
+sudo mount -a
+df -h | grep /mnt/data
+```
 
-## ✅ نتیجه
-پارتیشن جدید با UUID در /mnt/data به صورت خودکار در بوت سیستم Mount شد.
+## Cleanup (اختیاری)
+- حذف Mount Point یا کامنت‌کردن خط fstab.
